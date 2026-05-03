@@ -51,12 +51,11 @@ drop type if exists task_type;
 
 -- ---------------------------------------------------------------------------
 -- Adiciona novos valores ao task_status
+-- (o SET DEFAULT 'aberto' fica na 004 pois ADD VALUE não pode ser usado
+--  na mesma transação em que o valor foi criado)
 -- ---------------------------------------------------------------------------
 alter type task_status add value if not exists 'aberto' before 'backlog';
 alter type task_status add value if not exists 'cancelado';
-
--- Novo padrão: chamado começa como 'aberto'
-alter table tasks alter column status set default 'aberto';
 
 -- ---------------------------------------------------------------------------
 -- Tabela de relatórios diários
