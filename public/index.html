@@ -1196,8 +1196,8 @@
         <div class="brand">Click<span>Note</span></div>
         <nav class="nav">
           <button class="nav-btn active" data-view="view-dashboard">Dashboard</button>
-          <button class="nav-btn" data-view="view-tarefas">Tarefas</button>
-          <button class="nav-btn" data-view="view-projetos">Projetos</button>
+          <button class="nav-btn" data-view="view-tarefas">Chamados</button>
+          <button class="nav-btn" data-view="view-projetos">Contas</button>
         </nav>
         <div class="topbar-right">
           <div class="user-chip">
@@ -1217,8 +1217,8 @@
           </div>
           <div class="kpi-grid" id="admin-kpis"></div>
           <div class="card" style="margin-bottom: 16px;">
-            <h2>Projetos (clique para abrir)</h2>
-            <div id="dashboard-project-cards"><p class="text-muted">Carregando projetos...</p></div>
+            <h2>Contas (clique para abrir)</h2>
+            <div id="dashboard-project-cards"><p class="text-muted">Carregando contas...</p></div>
           </div>
           <div class="card">
             <h2>Contas ativas</h2>
@@ -1242,8 +1242,8 @@
         <div id="view-tarefas" class="view">
           <div class="card">
             <div class="flex-between" style="margin-bottom:18px;">
-              <h2 style="margin:0">Quadro de Tarefas</h2>
-              <button class="btn btn-primary btn-sm" onclick="openCreateTask()">+ Nova Tarefa</button>
+              <h2 style="margin:0">Quadro de Chamados</h2>
+              <button class="btn btn-primary btn-sm" onclick="openCreateTask()">+ Novo Chamado</button>
             </div>
             <div class="filters-bar">
               <label>Responsável</label>
@@ -1252,7 +1252,7 @@
                 <option value="daniel">Daniel</option>
                 <option value="bruna">Bruna</option>
               </select>
-              <label>Projeto</label>
+              <label>Conta</label>
               <select class="form-control" id="filter-project" style="width:auto">
                 <option value="">Todos</option>
               </select>
@@ -1267,8 +1267,8 @@
         <div id="view-projetos" class="view">
           <div class="card">
             <div class="flex-between" style="margin-bottom:20px;">
-              <h2 style="margin:0">Projetos por Conta</h2>
-              <button class="btn btn-primary btn-sm" onclick="openCreateProject()">+ Novo Projeto</button>
+              <h2 style="margin:0">Contas</h2>
+              <button class="btn btn-primary btn-sm" onclick="openCreateProject()">+ Nova Conta</button>
             </div>
             <div class="filter-tabs">
               <button class="filter-tab active" onclick="filterProjects('all', this)">Todos</button>
@@ -1300,47 +1300,33 @@
       <main class="main">
         <div class="flex-between" style="margin-bottom:24px;">
           <div>
-            <h2 style="font-size:20px;font-weight:700;">Minhas Solicitações</h2>
-            <p class="text-muted" style="margin-top:4px;">Acompanhe o andamento de cada pedido</p>
+            <h2 style="font-size:20px;font-weight:700;">Meus Chamados</h2>
+            <p class="text-muted" style="margin-top:4px;">Acompanhe o andamento de cada chamado</p>
           </div>
-          <button class="btn btn-primary" onclick="openClientRequest()">+ Nova Solicitação</button>
+          <button class="btn btn-primary" onclick="openClientRequest()">+ Novo Chamado</button>
         </div>
         <div class="kpi-grid" id="client-summary"></div>
         <div class="card mt-4">
-          <h2>Projetos solicitados</h2>
-          <div id="client-project-cards"><p class="text-muted">Carregando projetos...</p></div>
+          <h2>Serviços ativos</h2>
+          <div id="client-project-cards"><p class="text-muted">Carregando...</p></div>
         </div>
         <div id="client-tasks" class="card mt-4"><p class="text-muted">Carregando...</p></div>
       </main>
     </div>
 
-    <!-- ══════════════ MODAL: Projeto (Admin) ══════════════ -->
+    <!-- ══════════════ MODAL: Nova Conta (Admin) ══════════════ -->
     <div id="modal-project" class="modal-backdrop" onclick="closeModal('modal-project')">
-      <div class="modal modal-lg" onclick="event.stopPropagation()">
+      <div class="modal" onclick="event.stopPropagation()">
         <div class="modal-header">
-          <h2>Novo Projeto</h2>
+          <h2>Nova Conta</h2>
           <button class="btn-close" onclick="closeModal('modal-project')">&times;</button>
         </div>
         <form id="form-project" onsubmit="submitProject(event)">
-          <div class="two-col">
-            <div class="form-group">
-              <label>Nome do Cliente / Conta</label>
-              <input class="form-control" type="text" id="proj-client-name" required placeholder="Ex: Agência Alpha" />
-            </div>
-            <div class="form-group">
-              <label>Nome do Projeto</label>
-              <input class="form-control" type="text" id="proj-name" required placeholder="Ex: Reestruturação de Funil" />
-            </div>
+          <div class="form-group">
+            <label>Nome da conta</label>
+            <input class="form-control" type="text" id="proj-name" required placeholder="Ex: Clínica Vida" />
           </div>
-
           <div class="two-col">
-            <div class="form-group">
-              <label>Status Inicial</label>
-              <select class="form-control" id="proj-status">
-                <option value="em_andamento">Ativo</option>
-                <option value="concluido">Finalizado</option>
-              </select>
-            </div>
             <div class="form-group">
               <label>Tipo principal</label>
               <select class="form-control" id="proj-type">
@@ -1353,50 +1339,19 @@
                 <option value="manutencao">Manutenção</option>
               </select>
             </div>
-          </div>
-
-          <div class="form-group">
-            <label>Dados de acesso Kommo/API</label>
-            <textarea class="form-control" id="proj-access-notes" rows="3" placeholder="Links de acesso, credenciais de uso técnico, observações de segurança..."></textarea>
-          </div>
-
-          <div class="two-col">
             <div class="form-group">
-              <label>Funis e etapas iniciais</label>
-              <textarea class="form-control" id="proj-initial-funnels" rows="3" placeholder="Um item por linha"></textarea>
-            </div>
-            <div class="form-group">
-              <label>Grupos/contatos WhatsApp</label>
-              <textarea class="form-control" id="proj-whatsapp-channels" rows="3" placeholder="Um item por linha"></textarea>
+              <label>Status</label>
+              <select class="form-control" id="proj-status">
+                <option value="em_andamento">Ativo</option>
+                <option value="concluido">Finalizado</option>
+              </select>
             </div>
           </div>
-
-          <div class="two-col">
-            <div class="form-group">
-              <label>Pessoas responsáveis (cliente)</label>
-              <textarea class="form-control" id="proj-client-team" rows="3" placeholder="Nome e função em cada linha"></textarea>
-            </div>
-            <div class="form-group">
-              <label>Tipos de demanda frequentes</label>
-              <textarea class="form-control" id="proj-demand-types" rows="3" placeholder="Implementação, atualização de funil, automação..."></textarea>
-            </div>
-          </div>
-
-          <div class="form-group">
-            <label>Regras e ordens de atendimento</label>
-            <textarea class="form-control" id="proj-service-rules" rows="3" placeholder="Prioridades, SLAs, regras de aprovação, horários...\n"></textarea>
-          </div>
-
-          <div class="form-group">
-            <label>Integrações externas e observações</label>
-            <textarea class="form-control" id="proj-integration-notes" rows="3" placeholder="Integrações com agenda, ERP, bot, webhook, etc."></textarea>
-            <div class="form-help">Dica: você poderá editar esse dossiê depois no botão "Dossiê" de cada projeto.</div>
-          </div>
-
+          <div class="form-help" style="margin-bottom:16px;">Você pode adicionar acessos, funis e regras no dossiê depois de criar a conta.</div>
           <div id="proj-alert" class="alert alert-error" style="display:none"></div>
           <div class="modal-footer">
             <button type="button" class="btn btn-secondary" onclick="closeModal('modal-project')">Cancelar</button>
-            <button type="submit" id="btn-proj" class="btn btn-primary">Criar Projeto</button>
+            <button type="submit" id="btn-proj" class="btn btn-primary">Criar Conta</button>
           </div>
         </form>
       </div>
@@ -1406,7 +1361,7 @@
     <div id="modal-project-context" class="modal-backdrop" onclick="closeModal('modal-project-context')">
       <div class="modal modal-lg" onclick="event.stopPropagation()">
         <div class="modal-header">
-          <h2 id="project-context-title">Dossiê do Projeto</h2>
+          <h2 id="project-context-title">Dossiê da Conta</h2>
           <button class="btn-close" onclick="closeModal('modal-project-context')">&times;</button>
         </div>
 
@@ -1464,7 +1419,7 @@
     <div id="modal-quick-tasks" class="modal-backdrop" onclick="closeModal('modal-quick-tasks')">
       <div class="modal" onclick="event.stopPropagation()">
         <div class="modal-header">
-          <h2 id="quick-tasks-title">Tarefas rápidas</h2>
+          <h2 id="quick-tasks-title">Checklists</h2>
           <button class="btn-close" onclick="closeModal('modal-quick-tasks')">&times;</button>
         </div>
 
@@ -1517,7 +1472,7 @@
     <div id="modal-task" class="modal-backdrop" onclick="closeModal('modal-task')">
       <div class="modal" onclick="event.stopPropagation()">
         <div class="modal-header">
-          <h2 id="modal-task-title">Nova Tarefa</h2>
+          <h2 id="modal-task-title">Novo Chamado</h2>
           <button class="btn-close" onclick="closeModal('modal-task')">&times;</button>
         </div>
         <form id="form-task" onsubmit="submitTask(event)">
@@ -1579,7 +1534,7 @@
     <div id="modal-request" class="modal-backdrop" onclick="closeModal('modal-request')">
       <div class="modal" onclick="event.stopPropagation()">
         <div class="modal-header">
-          <h2>Nova Solicitação</h2>
+          <h2>Novo Chamado</h2>
           <button class="btn-close" onclick="closeModal('modal-request')">&times;</button>
         </div>
         <form id="form-request" onsubmit="submitRequest(event)">
@@ -1902,7 +1857,7 @@
 
       function renderWaitingTable(items) {
         if (!items.length) {
-          document.getElementById('admin-waiting-table').innerHTML = '<p class="text-muted">Sem tarefas aguardando follow-up.</p>';
+          document.getElementById('admin-waiting-table').innerHTML = '<p class="text-muted">Sem chamados aguardando follow-up.</p>';
           return;
         }
         document.getElementById('admin-waiting-table').innerHTML = `
@@ -2232,7 +2187,7 @@
 
       function openCreateTask() {
         document.getElementById('task-id').value = '';
-        document.getElementById('modal-task-title').textContent = 'Nova Tarefa';
+        document.getElementById('modal-task-title').textContent = 'Novo Chamado';
         document.getElementById('form-task').reset();
         fillProjectSelect('task-project');
         openModal('modal-task');
@@ -2240,7 +2195,7 @@
 
       function editTask(t) {
         document.getElementById('task-id').value          = t.id;
-        document.getElementById('modal-task-title').textContent = 'Editar Tarefa';
+        document.getElementById('modal-task-title').textContent = 'Editar Chamado';
         document.getElementById('task-title').value       = t.title;
         document.getElementById('task-status').value      = t.status;
         document.getElementById('task-owner').value       = t.owner ?? 'daniel';
@@ -2319,7 +2274,7 @@
                     Dossiê
                   </button>
                   <button class="btn btn-ghost" style="padding:4px 8px;font-size:12px;" onclick="openQuickTasks('${esc(String(p.id))}')">
-                    Tarefas rápidas
+                    Checklists
                   </button>
                   <button class="btn btn-ghost" style="padding:4px 8px;font-size:12px;" onclick="toggleProjectStatus('${esc(String(p.id))}', '${esc(p.status)}')">
                     ${isActive ? 'Finalizar' : 'Reativar'}
@@ -2352,7 +2307,6 @@
       function openCreateProject() {
         document.getElementById('form-project').reset();
         document.getElementById('proj-type').value = 'conta_kommo';
-        fillContextForm('proj', {});
         document.getElementById('proj-alert').style.display = 'none';
         openModal('modal-project');
       }
@@ -2361,11 +2315,9 @@
         e.preventDefault();
         const btn = document.getElementById('btn-proj');
         const alertEl = document.getElementById('proj-alert');
-        const clientName = document.getElementById('proj-client-name').value;
         const projectName = document.getElementById('proj-name').value;
         const projectStatus = document.getElementById('proj-status').value;
         const projectType = document.getElementById('proj-type').value;
-        const technicalContext = readContextFromPrefix('proj');
         alertEl.style.display = 'none';
         btn.disabled = true;
         try {
@@ -2373,20 +2325,17 @@
             method: 'POST',
             body: JSON.stringify({
               name: projectName,
-              client_name: clientName,
               status: projectStatus,
               type: projectType,
-              technical_context: technicalContext,
             }),
           });
 
           S.projects.push({
             ...result,
             name: result.name ?? projectName,
-            client_name: result.client_name ?? clientName,
             status: result.status ?? projectStatus,
             type: result.type ?? projectType,
-            technical_context: normalizeProjectContext(result.technical_context ?? technicalContext),
+            technical_context: normalizeProjectContext(result.technical_context ?? {}),
           });
 
           populateKanbanProjectFilter();
@@ -2405,7 +2354,7 @@
         if (!project) return;
 
         document.getElementById('ctx-project-id').value = _projectContextId;
-        document.getElementById('project-context-title').textContent = `Dossiê - ${project.name}`;
+        document.getElementById('project-context-title').textContent = `Dossiê — ${project.name}`;
         document.getElementById('ctx-alert').style.display = 'none';
         fillContextForm('ctx', project.technical_context ?? {});
         openModal('modal-project-context');
@@ -2470,7 +2419,7 @@
       async function openQuickTasks(projectId) {
         _quickTaskProjectId = String(projectId);
         const project = S.projects.find((p) => String(p.id) === _quickTaskProjectId);
-        document.getElementById('quick-tasks-title').textContent = `Tarefas rápidas - ${project?.name ?? 'Projeto'}`;
+        document.getElementById('quick-tasks-title').textContent = `Checklists — ${project?.name ?? 'Conta'}`;
 
         try {
           const data = await api(`/projects/${_quickTaskProjectId}/quick-tasks`);
