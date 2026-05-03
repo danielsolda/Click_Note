@@ -20,7 +20,7 @@ do $$ begin
 exception when duplicate_object then null; end $$;
 
 do $$ begin
-  create type project_type as enum ('implementacao', 'suporte', 'diagnostico', 'treinamento', 'automacao', 'integracao');
+  create type service_type as enum ('conta_kommo', 'automacao', 'ia', 'integracao', 'whatsapp_api', 'dashboard', 'manutencao');
 exception when duplicate_object then null; end $$;
 
 do $$ begin
@@ -29,17 +29,17 @@ exception when duplicate_object then null; end $$;
 
 do $$ begin
   create type task_status as enum (
-    'backlog',
-    'a_fazer_sprint',
+    'aberto',
     'em_progresso',
     'aguardando_cliente',
     'em_revisao',
-    'concluido'
+    'concluido',
+    'cancelado'
   );
 exception when duplicate_object then null; end $$;
 
 do $$ begin
-  create type task_type as enum ('implementacao', 'suporte', 'diagnostico', 'treinamento', 'recorrente', 'automacao');
+  create type ticket_type as enum ('ajuste_ia', 'ajuste_automacao', 'criacao_ia', 'criacao_automacao', 'criacao_conta_kommo', 'integracao', 'suporte', 'manutencao');
 exception when duplicate_object then null; end $$;
 
 do $$ begin
@@ -144,7 +144,7 @@ create table if not exists projects (
   client_id         uuid           not null references clients(id) on delete cascade,
   sub_client_id     uuid           references sub_clients(id) on delete set null,
   name              text           not null,
-  type              project_type   not null default 'implementacao',
+  type              service_type   not null default 'conta_kommo',
   status            project_status not null default 'ativo',
   technical_context jsonb,
   created_at        timestamptz    not null default now(),
@@ -164,8 +164,8 @@ create table if not exists tasks (
   project_id          uuid         not null references projects(id) on delete cascade,
   title               text         not null,
   description         text,
-  task_type           task_type    not null default 'implementacao',
-  status              task_status  not null default 'backlog',
+  task_type           ticket_type  not null default 'suporte',
+  status              task_status  not null default 'aberto',
   owner               owner_name   not null default 'daniel',
   effort_label        effort_label,
   story_points        smallint     check (story_points >= 0),
@@ -245,6 +245,18 @@ create table if not exists recurring_generated (
 );
 
 -- ---------------------------------------------------------------------------
+-- Tabela: daily_reports (relatórios diários por cliente)
+-- ---------------------------------------------------------------------------
+create table if not exists daily_reports (
+  id            uuid        primary key default gen_random_uuid(),
+  client_id     uuid        not null references clients(id) on delete cascade,
+  report_date   date        not null default current_date,
+  summary       jsonb       not null default '{}',
+  generated_at  timestamptz not null default now(),
+  unique (client_id, report_date)
+);
+
+-- ---------------------------------------------------------------------------
 -- Tabela: users (autenticação)
 -- ---------------------------------------------------------------------------
 create table if not exists users (
@@ -281,6 +293,7 @@ create index if not exists idx_sprint_tasks_task_id    on sprint_tasks(task_id);
 create index if not exists idx_users_email             on users(lower(email));
 create index if not exists idx_users_client_id         on users(client_id);
 create index if not exists idx_users_role              on users(role);
+create index if not exists idx_daily_reports_client_date on daily_reports(client_id, report_date desc);
 
 -- ---------------------------------------------------------------------------
 -- View: vw_dashboard_global

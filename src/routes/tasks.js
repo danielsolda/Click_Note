@@ -133,7 +133,7 @@ tasksRouter.post('/', asyncRoute(async (req, res) => {
     `insert into tasks
        (project_id, title, description, task_type, status, owner,
         effort_label, story_points, due_date, is_recurring, recurrence_interval)
-     values ($1, $2, $3, coalesce($4, 'implementacao'), coalesce($5, 'backlog'),
+     values ($1, $2, $3, coalesce($4, 'suporte'), coalesce($5, 'aberto'),
              coalesce($6, 'daniel'), $7, $8, $9, coalesce($10, false), $11)
      returning *`,
     [
@@ -170,7 +170,7 @@ tasksRouter.put('/:id', asyncRoute(async (req, res) => {
     `update tasks
      set title            = coalesce($1, title),
          description      = coalesce($2, description),
-         task_type        = coalesce($3::task_type, task_type),
+         task_type        = coalesce($3::ticket_type, task_type),
          status           = coalesce($4::task_status, status),
          owner            = coalesce($5::owner_name, owner),
          effort_label     = coalesce($6::effort_label, effort_label),

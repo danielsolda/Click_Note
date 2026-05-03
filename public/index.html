@@ -1186,11 +1186,6 @@
             </div>
             <button type="submit" id="btn-login" class="btn btn-primary btn-full">Entrar</button>
           </form>
-          <div class="demo-hint">
-            <div style="font-size:11px;text-transform:uppercase;letter-spacing:0.05em;color:var(--accent);font-weight:700;margin-bottom:6px;">Credenciais de demonstração</div>
-            <div><strong>Admin:</strong> <code>admin@clicknote.app</code> / <code>admin123</code> &nbsp;<button class="demo-fill" onclick="fillDemo('admin@clicknote.app','admin123')">preencher</button></div>
-            <div><strong>Cliente:</strong> <code>alpha@demo.com</code> / <code>demo123</code> &nbsp;<button class="demo-fill" onclick="fillDemo('alpha@demo.com','demo123')">preencher</button></div>
-          </div>
         </div>
       </div>
     </div>
@@ -1349,12 +1344,13 @@
             <div class="form-group">
               <label>Tipo principal</label>
               <select class="form-control" id="proj-type">
-                <option value="implementacao">Implementação Kommo</option>
+                <option value="conta_kommo">Conta Kommo</option>
                 <option value="automacao">Automação</option>
-                <option value="integracao">Integração API aberta</option>
-                <option value="suporte">Suporte</option>
-                <option value="diagnostico">Diagnóstico</option>
-                <option value="treinamento">Treinamento</option>
+                <option value="ia">IA</option>
+                <option value="integracao">Integração</option>
+                <option value="whatsapp_api">WhatsApp API</option>
+                <option value="dashboard">Dashboard</option>
+                <option value="manutencao">Manutenção</option>
               </select>
             </div>
           </div>
@@ -1527,12 +1523,12 @@
         <form id="form-task" onsubmit="submitTask(event)">
           <input type="hidden" id="task-id" />
           <div class="form-group">
-            <label>Projeto</label>
+            <label>Serviço / Projeto</label>
             <select class="form-control" id="task-project" required></select>
           </div>
           <div class="form-group">
-            <label>Título</label>
-            <input class="form-control" type="text" id="task-title" required placeholder="Descreva a tarefa..." />
+            <label>Título do chamado</label>
+            <input class="form-control" type="text" id="task-title" required placeholder="Descreva o chamado..." />
           </div>
           <div class="form-group">
             <label>Descrição (opcional)</label>
@@ -1540,23 +1536,36 @@
           </div>
           <div class="two-col">
             <div class="form-group">
-              <label>Status</label>
-              <select class="form-control" id="task-status">
-                <option value="backlog">Backlog</option>
-                <option value="a_fazer_sprint">A Fazer (Sprint)</option>
-                <option value="em_progresso">Em Progresso</option>
-                <option value="aguardando_cliente">Aguardando Cliente</option>
-                <option value="em_revisao">Em Revisão</option>
-                <option value="concluido">Concluído</option>
+              <label>Tipo de chamado</label>
+              <select class="form-control" id="task-type">
+                <option value="ajuste_ia">Ajuste em IA</option>
+                <option value="ajuste_automacao">Ajuste em Automação</option>
+                <option value="criacao_ia">Criação de IA</option>
+                <option value="criacao_automacao">Criação de Automação</option>
+                <option value="criacao_conta_kommo">Criação de Conta Kommo</option>
+                <option value="integracao">Integração</option>
+                <option value="suporte">Suporte</option>
+                <option value="manutencao">Manutenção</option>
               </select>
             </div>
             <div class="form-group">
-              <label>Responsável</label>
-              <select class="form-control" id="task-owner">
-                <option value="daniel">Daniel</option>
-                <option value="bruna">Bruna</option>
+              <label>Status</label>
+              <select class="form-control" id="task-status">
+                <option value="aberto">Aberto</option>
+                <option value="em_progresso">Em Andamento</option>
+                <option value="aguardando_cliente">Aguardando Cliente</option>
+                <option value="em_revisao">Em Revisão</option>
+                <option value="concluido">Concluído</option>
+                <option value="cancelado">Cancelado</option>
               </select>
             </div>
+          </div>
+          <div class="form-group">
+            <label>Responsável</label>
+            <select class="form-control" id="task-owner">
+              <option value="daniel">Daniel</option>
+              <option value="bruna">Bruna</option>
+            </select>
           </div>
           <div class="modal-footer">
             <button type="button" class="btn btn-secondary" onclick="closeModal('modal-task')">Cancelar</button>
@@ -1575,16 +1584,29 @@
         </div>
         <form id="form-request" onsubmit="submitRequest(event)">
           <div class="form-group">
-            <label>Projeto</label>
+            <label>Serviço / Projeto</label>
             <select class="form-control" id="request-project" required></select>
           </div>
           <div class="form-group">
-            <label>Título da solicitação</label>
-            <input class="form-control" type="text" id="request-title" required placeholder="Ex: Corrigir automação de follow-up..." />
+            <label>Tipo de chamado</label>
+            <select class="form-control" id="request-type" required>
+              <option value="ajuste_ia">Ajuste em IA</option>
+              <option value="ajuste_automacao">Ajuste em Automação</option>
+              <option value="criacao_ia">Criação de IA</option>
+              <option value="criacao_automacao">Criação de Automação</option>
+              <option value="criacao_conta_kommo">Criação de Conta Kommo</option>
+              <option value="integracao">Integração</option>
+              <option value="suporte">Suporte</option>
+              <option value="manutencao">Manutenção</option>
+            </select>
+          </div>
+          <div class="form-group">
+            <label>Título do chamado</label>
+            <input class="form-control" type="text" id="request-title" required placeholder="Ex: IA respondeu errado no comercial da Clínica X..." />
           </div>
           <div class="form-group">
             <label>Descrição / Detalhes</label>
-            <textarea class="form-control" id="request-description" rows="4" placeholder="Descreva o que precisa ser feito, contexto, links relevantes..."></textarea>
+            <textarea class="form-control" id="request-description" rows="4" placeholder="Descreva o problema, o que aconteceu, links ou prints relevantes..."></textarea>
           </div>
           <div id="request-alert" class="alert alert-success" style="display:none">Solicitação enviada com sucesso!</div>
           <div class="modal-footer">
@@ -1604,21 +1626,32 @@
       let _quickTaskProjectId = null;
       let _projectContextId = null;
       const KANBAN_COLS = [
-        { key: 'backlog',            label: 'Backlog',        color: '#696759' },
-        { key: 'a_fazer_sprint',     label: 'A Fazer',        color: '#c8963f' },
-        { key: 'em_progresso',       label: 'Em Progresso',   color: '#e9b547' },
+        { key: 'aberto',             label: 'Aberto',         color: '#696759' },
+        { key: 'em_progresso',       label: 'Em Andamento',   color: '#e9b547' },
         { key: 'aguardando_cliente', label: 'Aguardando',     color: '#e6a050' },
         { key: 'em_revisao',         label: 'Em Revisão',     color: '#b88930' },
         { key: 'concluido',          label: 'Concluído',      color: '#8ec07c' },
+        { key: 'cancelado',          label: 'Cancelado',      color: '#555' },
       ];
       const STATUS_INFO = Object.fromEntries(KANBAN_COLS.map(c => [c.key, c]));
       const PROJECT_TYPE_LABELS = {
-        implementacao: 'Implementação',
-        suporte: 'Suporte',
-        diagnostico: 'Diagnóstico',
-        treinamento: 'Treinamento',
-        automacao: 'Automação',
-        integracao: 'Integração',
+        conta_kommo:  'Conta Kommo',
+        automacao:    'Automação',
+        ia:           'IA',
+        integracao:   'Integração',
+        whatsapp_api: 'WhatsApp API',
+        dashboard:    'Dashboard',
+        manutencao:   'Manutenção',
+      };
+      const TICKET_TYPE_LABELS = {
+        ajuste_ia:           'Ajuste em IA',
+        ajuste_automacao:    'Ajuste em Automação',
+        criacao_ia:          'Criação de IA',
+        criacao_automacao:   'Criação de Automação',
+        criacao_conta_kommo: 'Criação de Conta Kommo',
+        integracao:          'Integração',
+        suporte:             'Suporte',
+        manutencao:          'Manutenção',
       };
       const API_BASE = '';
 
@@ -2223,6 +2256,7 @@
           project_id:  document.getElementById('task-project').value,
           title:       document.getElementById('task-title').value,
           description: document.getElementById('task-description').value,
+          task_type:   document.getElementById('task-type').value,
           status:      document.getElementById('task-status').value,
           owner:       document.getElementById('task-owner').value,
         };
@@ -2317,7 +2351,7 @@
 
       function openCreateProject() {
         document.getElementById('form-project').reset();
-        document.getElementById('proj-type').value = 'implementacao';
+        document.getElementById('proj-type').value = 'conta_kommo';
         fillContextForm('proj', {});
         document.getElementById('proj-alert').style.display = 'none';
         openModal('modal-project');
@@ -2644,9 +2678,10 @@
             method: 'POST',
             body: JSON.stringify({
               project_id:  document.getElementById('request-project').value,
+              task_type:   document.getElementById('request-type').value,
               title:       document.getElementById('request-title').value,
               description: document.getElementById('request-description').value,
-              status: 'backlog',
+              status: 'aberto',
             }),
           });
           alertEl.className     = 'alert alert-success';

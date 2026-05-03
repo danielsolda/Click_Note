@@ -6,6 +6,8 @@ import { fileURLToPath } from 'node:url';
 import { apiRouter } from './routes/index.js';
 import { errorHandler } from './middleware/error-handler.js';
 import { seedAdmin } from './seed-admin.js';
+import { generateDailyReports } from './routes/reports.js';
+import cron from 'node-cron';
 
 const app = express();
 const port = Number(process.env.PORT ?? 3000);
@@ -30,4 +32,14 @@ app.listen(port, async () => {
   await seedAdmin().catch((err) =>
     console.error('[seed-admin] Erro ao criar admin:', err.message),
   );
+
+  // Gera relatório diário todo dia às 23h (horário de SP)
+  if (process.env.DATABASE_URL) {
+    cron.schedule('0 23 * * *', () => {
+      generateDailyReports().catch((err) =>
+        console.error('[reports] Erro no cron:', err.message),
+      );
+    }, { timezone: 'America/Sao_Paulo' });
+    console.log('[reports] Cron de relatório diário agendado para 23h.');
+  }
 });

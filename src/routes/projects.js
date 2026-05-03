@@ -242,7 +242,7 @@ projectsRouter.post('/', asyncRoute(async (req, res) => {
   }
   const result = await query(
     `insert into projects (client_id, sub_client_id, name, type, technical_context, status)
-     values ($1, $2, $3, coalesce($4, 'implementacao'), $5, coalesce($6, 'ativo'))
+     values ($1, $2, $3, coalesce($4, 'conta_kommo'), $5, coalesce($6, 'ativo'))
      returning *`,
     [client_id, sub_client_id ?? null, name, type, JSON.stringify(normalizedContext), status ? normalizeStatusToDb(status) : null],
   );
@@ -299,7 +299,7 @@ projectsRouter.put('/:id', asyncRoute(async (req, res) => {
   const result = await query(
     `update projects
      set name          = coalesce($1, name),
-         type          = coalesce($2::project_type, type),
+         type          = coalesce($2::service_type, type),
          status        = coalesce($3::project_status, status),
          sub_client_id = coalesce($4, sub_client_id),
          technical_context = coalesce($5::jsonb, technical_context)

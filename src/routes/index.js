@@ -7,6 +7,7 @@ import { projectsRouter } from './projects.js';
 import { tasksRouter } from './tasks.js';
 import { backlogRouter } from './backlog.js';
 import { authRouter } from './auth.js';
+import { reportsRouter } from './reports.js';
 import { requireAuth, requireAdmin } from '../middleware/auth.js';
 
 export const apiRouter = express.Router();
@@ -24,3 +25,4 @@ apiRouter.use('/sub-clients', requireAdmin, subClientsRouter);
 apiRouter.use('/projects',    projectsRouter);
 apiRouter.use('/tasks',       tasksRouter);
 apiRouter.use('/backlog',     requireAdmin, backlogRouter);
+apiRouter.use('/reports',     reportsRouter);
