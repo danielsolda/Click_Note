@@ -12,7 +12,8 @@
     "test": "node --test",
     "db:migrate": "node scripts/migrate.js",
     "db:bootstrap": "node scripts/bootstrap-db.js",
-    "db:seed": "node scripts/seed-demo.js"
+    "db:seed": "node scripts/seed-demo.js",
+    "db:seed-admin": "node scripts/seed-admin.js"
   },
   "dependencies": {
     "bcryptjs": "^2.4.3",

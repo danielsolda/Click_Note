@@ -100,19 +100,6 @@ authRouter.get('/users', requireAuth, requireAdmin, async (_req, res) => {
       return res.json({ items, source: 'demo' });
     }
 
-    await query(`
-      create table if not exists users (
-        id uuid primary key default gen_random_uuid(),
-        name text not null,
-        email text not null unique,
-        password_hash text not null,
-        role text not null check (role in ('admin', 'client')),
-        client_id uuid references clients(id) on delete set null,
-        active boolean not null default true,
-        created_at timestamptz not null default now()
-      )
-    `);
-
     const result = await query(
       `select id, name, email, role, client_id
        from users
@@ -159,19 +146,6 @@ authRouter.post('/users', requireAuth, requireAdmin, async (req, res) => {
         source: 'demo',
       });
     }
-
-    await query(`
-      create table if not exists users (
-        id uuid primary key default gen_random_uuid(),
-        name text not null,
-        email text not null unique,
-        password_hash text not null,
-        role text not null check (role in ('admin', 'client')),
-        client_id uuid references clients(id) on delete set null,
-        active boolean not null default true,
-        created_at timestamptz not null default now()
-      )
-    `);
 
     const dup = await query(`select id from users where lower(email) = lower($1) limit 1`, [email]);
     if (dup.rows[0]) return res.status(409).json({ error: 'E-mail já cadastrado' });
