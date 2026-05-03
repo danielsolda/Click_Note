@@ -5,6 +5,7 @@ import path from 'node:path';
 import { fileURLToPath } from 'node:url';
 import { apiRouter } from './routes/index.js';
 import { errorHandler } from './middleware/error-handler.js';
+import { seedAdmin } from './seed-admin.js';
 
 const app = express();
 const port = Number(process.env.PORT ?? 3000);
@@ -24,6 +25,9 @@ app.get(/.*/, (_req, res) => {
 
 app.use(errorHandler);
 
-app.listen(port, () => {
+app.listen(port, async () => {
   console.log(`[clicknote] MVP rodando na porta ${port}`);
+  await seedAdmin().catch((err) =>
+    console.error('[seed-admin] Erro ao criar admin:', err.message),
+  );
 });
