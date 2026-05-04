@@ -1326,26 +1326,12 @@
             <label>Nome da conta</label>
             <input class="form-control" type="text" id="proj-name" required placeholder="Ex: Clínica Vida" />
           </div>
-          <div class="two-col">
-            <div class="form-group">
-              <label>Tipo principal</label>
-              <select class="form-control" id="proj-type">
-                <option value="conta_kommo">Conta Kommo</option>
-                <option value="automacao">Automação</option>
-                <option value="ia">IA</option>
-                <option value="integracao">Integração</option>
-                <option value="whatsapp_api">WhatsApp API</option>
-                <option value="dashboard">Dashboard</option>
-                <option value="manutencao">Manutenção</option>
-              </select>
-            </div>
-            <div class="form-group">
-              <label>Status</label>
-              <select class="form-control" id="proj-status">
-                <option value="em_andamento">Ativo</option>
-                <option value="concluido">Finalizado</option>
-              </select>
-            </div>
+          <div class="form-group">
+            <label>Status</label>
+            <select class="form-control" id="proj-status">
+              <option value="em_andamento">Ativo</option>
+              <option value="concluido">Finalizado</option>
+            </select>
           </div>
           <div class="form-help" style="margin-bottom:16px;">Você pode adicionar acessos, funis e regras no dossiê depois de criar a conta.</div>
           <div id="proj-alert" class="alert alert-error" style="display:none"></div>
@@ -2306,7 +2292,6 @@
 
       function openCreateProject() {
         document.getElementById('form-project').reset();
-        document.getElementById('proj-type').value = 'conta_kommo';
         document.getElementById('proj-alert').style.display = 'none';
         openModal('modal-project');
       }
@@ -2317,7 +2302,6 @@
         const alertEl = document.getElementById('proj-alert');
         const projectName = document.getElementById('proj-name').value;
         const projectStatus = document.getElementById('proj-status').value;
-        const projectType = document.getElementById('proj-type').value;
         alertEl.style.display = 'none';
         btn.disabled = true;
         try {
@@ -2326,7 +2310,6 @@
             body: JSON.stringify({
               name: projectName,
               status: projectStatus,
-              type: projectType,
             }),
           });
 
@@ -2334,7 +2317,6 @@
             ...result,
             name: result.name ?? projectName,
             status: result.status ?? projectStatus,
-            type: result.type ?? projectType,
             technical_context: normalizeProjectContext(result.technical_context ?? {}),
           });
 
