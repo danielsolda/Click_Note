@@ -6,6 +6,7 @@ import { fileURLToPath } from 'node:url';
 import { apiRouter } from './routes/index.js';
 import { errorHandler } from './middleware/error-handler.js';
 import { seedAdmin } from './seed-admin.js';
+import { seedInitialData } from './seed-initial.js';
 import { generateDailyReports } from './routes/reports.js';
 import cron from 'node-cron';
 
@@ -31,6 +32,9 @@ app.listen(port, async () => {
   console.log(`[clicknote] MVP rodando na porta ${port}`);
   await seedAdmin().catch((err) =>
     console.error('[seed-admin] Erro ao criar admin:', err.message),
+  );
+  await seedInitialData().catch((err) =>
+    console.error('[seed-initial] Erro ao criar dados iniciais:', err.message),
   );
 
   // Gera relatório diário todo dia às 23h (horário de SP)
