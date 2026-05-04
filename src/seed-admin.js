@@ -1,6 +1,6 @@
 import 'dotenv/config';
 import bcrypt from 'bcryptjs';
-import { pool } from '../src/db.js';
+import { pool } from './db.js';
 
 const email    = process.env.ADMIN_EMAIL    ?? 'admin@clicknote.app';
 const password = process.env.ADMIN_PASSWORD ?? 'mude-em-producao!';
@@ -11,26 +11,23 @@ async function seedAdmin() {
 
   const client = await pool.connect();
   try {
-    const { rows } = await client.query(
-      `select id from users where role = 'admin' and active = true limit 1`,
-    );
-
-    if (rows.length > 0) {
-      console.log('[seed-admin] Admin já existe. Nenhuma ação necessária.');
-      return;
-    }
-
     const password_hash = await bcrypt.hash(password, 12);
-    const { rows: created } = await client.query(
+    const { rows } = await client.query(
       `insert into users (name, email, password_hash, role, active)
        values ($1, $2, $3, 'admin', true)
-       on conflict (email) do nothing
-       returning id, email`,
+       on conflict (email) do update
+         set password_hash = excluded.password_hash,
+             name          = excluded.name,
+             active        = true,
+             updated_at    = now()
+       returning id, email, (xmax = 0) as inserted`,
       [name, email, password_hash],
     );
 
-    if (created.length > 0) {
-      console.log(`[seed-admin] Admin criado: ${created[0].email}`);
+    if (rows[0]?.inserted) {
+      console.log(`[seed-admin] Admin criado: ${rows[0].email}`);
+    } else {
+      console.log(`[seed-admin] Admin atualizado: ${rows[0].email}`);
     }
   } finally {
     client.release();
