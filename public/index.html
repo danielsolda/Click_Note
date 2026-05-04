@@ -1683,9 +1683,14 @@
           try {
             const { user } = await api('/auth/me');
             S.user = user;
-            await showApp();
+            showScreen('screen-admin'); // mostra tela antes de carregar dados
+            try { await showApp(); } catch { /* erros de carregamento não bloqueiam */ }
             return;
-          } catch { /* fall to login */ }
+          } catch {
+            // token inválido ou expirado — limpa e mostra login sem mensagem de erro
+            S.token = null;
+            localStorage.removeItem('cn_token');
+          }
         }
         showScreen('screen-login');
       })();
@@ -1738,9 +1743,9 @@
           });
           S.token = data.token; S.user = data.user;
           localStorage.setItem('cn_token', data.token);
-          await showApp();
+          try { await showApp(); } catch { /* erros de carregamento não bloqueiam o login */ }
         } catch (err) {
-          alert.textContent = err.message;
+          alert.textContent = err.message === 'Sessão expirada' ? 'Credenciais inválidas' : err.message;
           alert.style.display = 'block';
         } finally {
           btn.disabled = false; btn.textContent = 'Entrar';
