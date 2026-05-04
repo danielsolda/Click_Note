@@ -237,14 +237,27 @@ projectsRouter.post('/', asyncRoute(async (req, res) => {
     });
   }
 
-  if (!client_id || !name) {
-    return res.status(400).json({ error: 'Campos "client_id" e "name" são obrigatórios' });
+  if (!name) {
+    return res.status(400).json({ error: 'Campo "name" é obrigatório' });
   }
+
+  // Se client_id não enviado, usa o primeiro cliente ativo (parceiro único)
+  let resolvedClientId = client_id;
+  if (!resolvedClientId) {
+    const { rows } = await query(
+      `select id from clients where active = true order by created_at asc limit 1`,
+    );
+    if (!rows[0]) {
+      return res.status(400).json({ error: 'Nenhum cliente cadastrado. Crie um cliente antes de adicionar contas.' });
+    }
+    resolvedClientId = rows[0].id;
+  }
+
   const result = await query(
     `insert into projects (client_id, sub_client_id, name, type, technical_context, status)
      values ($1, $2, $3, coalesce($4, 'conta_kommo'), $5, coalesce($6, 'ativo'))
      returning *`,
-    [client_id, sub_client_id ?? null, name, type, JSON.stringify(normalizedContext), status ? normalizeStatusToDb(status) : null],
+    [resolvedClientId, sub_client_id ?? null, name, type, JSON.stringify(normalizedContext), status ? normalizeStatusToDb(status) : null],
   );
   res.status(201).json({
     ...result.rows[0],
